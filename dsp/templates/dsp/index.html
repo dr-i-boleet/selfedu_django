@@ -1,0 +1,17 @@
+{% extends 'dsp/base.html' %}
+
+{% block content %}
+    <ul>
+        {% for p in plc %}
+            <li>
+                <h1>{{ p.name }}</h1>
+            <p>
+                {{ p.description }}
+            </p>
+                <p class="link-read-post"><a href="{{  p.get_absolute_url }}">Читать пост</a></p>
+            <hr>
+            </li>
+        {% endfor %}
+    </ul>
+    </p>
+{% endblock content %}
