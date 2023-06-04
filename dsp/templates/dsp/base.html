@@ -33,10 +33,13 @@
 <!-- Sidebar слева -->
 	<td valign="top" class="left-chapters">
 	<ul id="leftchapters">
-		<li class="selected">Все категории</li>
-		<li><a href="#">Актрисы</a></li>
-		<li><a href="#">Певицы</a></li>
-		<li><a href="#">Спортсменки</a></li>
+        {% if room_sel == 0 %}
+            <li class="selected">Все категории</li>
+        {% else %}
+            <li><a href="{% url 'main' %}">Все категории</a></li>
+        {% endif %}
+
+        {% show_room %}
 		<li class="share">
 		<p>Наш канал</p>
 		<a class="share-yt" href="https://www.youtube.com/channel/UClJzWfGWuGJL2t-3dYKcHTA/playlists" target="_blank" rel="nofollow"></a>

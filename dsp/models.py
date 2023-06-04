@@ -11,11 +11,19 @@ class Plc(models.Model):
     dt_created = models.DateTimeField(auto_now_add=True)
     dt_updated = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=True)
+    room = models.ForeignKey('Room', on_delete=models.PROTECT, null=True)
 
     def __str__(self):
         return f'{self.name}: {self.description}'
 
     def get_absolute_url(self):
         return reverse('plc', kwargs={'plc_id': self.pk})
+
+
+class Room(models.Model):
+    name = models.CharField(max_length=255, db_index=True)
+
+    def __str__(self):
+        return f'{self.name}'
 
 

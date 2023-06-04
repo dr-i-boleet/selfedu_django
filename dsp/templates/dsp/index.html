@@ -1,9 +1,13 @@
 {% extends 'dsp/base.html' %}
 
 {% block content %}
-    <ul>
+    <ul class="list-articles">
         {% for p in plc %}
             <li>
+            <div class="article-panel">
+                <p class="first">Помещение: {{ p.room }}</p>
+                <p class="last">Дата:{{ p.dt_updated|date:'d-m-Y H:i:s' }}</p>
+            </div>
                 <h1>{{ p.name }}</h1>
             <p>
                 {{ p.description }}

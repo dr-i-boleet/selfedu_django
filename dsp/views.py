@@ -1,4 +1,5 @@
-from django.http import HttpResponse, HttpResponseNotFound
+from django.db.models import QuerySet
+from django.http import HttpResponse, HttpResponseNotFound, Http404
 
 from django.shortcuts import render, redirect
 from dsp.models import *
@@ -14,7 +15,9 @@ def index(request):
     context = {
         'menu': menu,
         'plc': Plc.objects.all(),
-        'title': 'Главная страница'
+        'room': Room.objects.order_by('name'),
+        'title': 'Главная страница',
+        'room_sel': 0
     }
     return render(request, 'dsp/index.html', context=context)
 
@@ -40,13 +43,22 @@ def plc(request, plc_id):
     return render(request, 'dsp/plc.html', {'menu': menu, 'title': 'PLC', 'plc': plc})
 
 
-def rooms(request, roomid):
-    if request.GET:
-        return HttpResponse(f"<h1>Электропомещения</h1><p>{request.GET['room']}</p>")
+def room(request, roomid):
+    rooms = Room.objects.order_by('name')
 
-    if roomid > 100:
-        return redirect('main')
-    return HttpResponse(f'<h1>Электропомещения</h1><p>{roomid}</p>')
+    try:
+        title = Room.objects.get(id=roomid).name
+    except Room.DoesNotExist:
+        raise Http404()
+
+    context = {
+        'menu': menu,
+        'plc': Plc.objects.filter(room=roomid),
+        'room': rooms,
+        'title': title,
+        'room_sel': roomid
+    }
+    return render(request, 'dsp/index.html', context=context)
 
 
 def pageNotFound(request, exception):
