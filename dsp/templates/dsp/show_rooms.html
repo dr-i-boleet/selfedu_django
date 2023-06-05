@@ -1,7 +1,7 @@
 {% for r in room %}
-            {% if r.id == room_sel %}
-                <li class="selected">{{ r.name }}</li>
-            {% else %}
-                <li><a href="{% url 'room' r.id %}">{{ r.name }}</a></li>
-            {% endif %}
-        {% endfor %}
+    {% if r.id == room_sel %}
+        <li class="selected">{{ r.name }}</li>
+    {% else %}
+        <li><a href="{% url 'room' r.slag %}">{{ r.name }}</a></li>
+    {% endif %}
+{% endfor %}
