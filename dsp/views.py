@@ -31,11 +31,8 @@ def add_plc(request):
     if request.method == 'POST':
         form = AddPlcForm(request.POST)
         if form.is_valid():
-            try:
-                Plc.objects.create(**form.cleaned_data)
-                return redirect('main')
-            except:
-                form.add_error(None, 'Ошибка добавления данных!')
+            form.save()
+            return redirect('main')
 
     else:
         form = AddPlcForm()

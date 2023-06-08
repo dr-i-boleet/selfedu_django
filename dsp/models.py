@@ -5,14 +5,14 @@ from django.urls import reverse
 
 
 class Plc(models.Model):
-    name = models.CharField(max_length=255)
-    slag = models.SlugField(max_length=255, unique=True, db_index=True)
-    description = models.TextField(blank=True)
-    photo = models.ImageField(upload_to='photo/%Y/%m/%d/', null=True)
+    name = models.CharField(max_length=255, verbose_name='Название')
+    slag = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='Ссылка')
+    description = models.TextField(blank=True, verbose_name='Описание')
+    photo = models.ImageField(upload_to='photo/%Y/%m/%d/', verbose_name='Фото')
     dt_created = models.DateTimeField(auto_now_add=True)
     dt_updated = models.DateTimeField(auto_now=True)
-    is_published = models.BooleanField(default=True)
-    room = models.ForeignKey('Room', on_delete=models.PROTECT, null=True)
+    is_published = models.BooleanField(default=True, verbose_name='Опубликовать')
+    room = models.ForeignKey('Room', on_delete=models.PROTECT, null=True, verbose_name='Электропомещение')
 
     def __str__(self):
         return f'{self.name}: {self.description}'
