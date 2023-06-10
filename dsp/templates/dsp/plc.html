@@ -2,6 +2,9 @@
 
 {% block content %}
     <h1>{{ title }}</h1>
+    {% if plc.photo %}
+        <p><img class="img-article-left" src="{{plc.photo.url}}"></p>
+    {% endif %}
     <p>
         {{ plc }}
     </p>

@@ -27,5 +27,9 @@ class AddPlcForm(forms.ModelForm):
 
     def clean_name(self):
         name = self.cleaned_data['name']
+        print(name)
         if len(name) > 16:
             raise ValidationError('Поле не должно быть длиннее 16 символов')
+
+        return name
+

@@ -27,7 +27,7 @@ img.img-article-left {
 
 img.img-article-left.thumb {
 	max-width: 150px;
-	height: auto;
+	max-height: 100px;
 }
 
 p.link-read-post {
