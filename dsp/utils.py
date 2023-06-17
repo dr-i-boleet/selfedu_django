@@ -4,8 +4,7 @@ from dsp.models import *
 
 menu = [{'title': 'О Сайте', 'url_name': 'about'},
         {'title': 'Добавить PLC', 'url_name': 'add_plc'},
-        {'title': 'Обратная связь', 'url_name': 'feedback'},
-        {'title': 'Войти', 'url_name': 'login'}]
+        {'title': 'Обратная связь', 'url_name': 'feedback'}]
 
 
 class DataMixin:
