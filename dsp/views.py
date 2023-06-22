@@ -14,9 +14,7 @@ from dsp.forms import *
 from dsp.utils import *
 
 menu = [{'title': 'О Сайте', 'url_name': 'about'},
-        {'title': 'Добавить PLC', 'url_name': 'add_plc'},
-        {'title': 'Обратная связь', 'url_name': 'feedback'},
-        {'title': 'Войти', 'url_name': 'login'}]
+        {'title': 'Обратная связь', 'url_name': 'feedback'}]
 
 
 class IndexView(DataMixin, ListView):
@@ -30,7 +28,7 @@ class IndexView(DataMixin, ListView):
         return dict(list(context.items()) + list(user_context.items()))
 
     def get_queryset(self):
-        return Plc.objects.filter(is_published=True)
+        return Plc.objects.filter(is_published=True).select_related('room')
 
 
 def index(request):
@@ -105,11 +103,12 @@ class RoomView(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        user_context = self.get_user_context(title=context['plc'][0].room.name, room_sel=context['plc'][0].room.id)
+        r = Room.objects.get(slag=self.kwargs['room_slug'])
+        user_context = self.get_user_context(title=r.name, room_sel=r.id)
         return dict(list(context.items()) + list(user_context.items()))
 
     def get_queryset(self):
-        return Plc.objects.filter(is_published=True, room__slag=self.kwargs['room_slug'])
+        return Plc.objects.filter(is_published=True, room__slag=self.kwargs['room_slug']).select_related('room')
 
 
 def room(request, room_slug):

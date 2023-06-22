@@ -24,6 +24,7 @@ from dsp.views import pageNotFound
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('dsp.urls')),
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
 if selfedu_django.settings.DEBUG:
