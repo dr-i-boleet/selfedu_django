@@ -5,8 +5,19 @@
     <form method="post">
     {% csrf_token %}
     {% for f in form %}
-        <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}
-        <div class="form-error">{{ f.errors }}</div>
+        {% if f.label == 'Captcha' %}
+            {% if load_count >= 3 %}
+                <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}
+                {% if load_count > 3 %}
+                    <div class="form-error">{{ f.errors }}</div>
+                {% else %}
+                    <p></p>
+                {% endif %}
+            {% endif %}
+        {% else %}
+            <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}
+            <div class="form-error">{{ f.errors }}</div>
+        {% endif %}
     {% endfor %}
     <button class="form-button">Войти</button>
     </form>

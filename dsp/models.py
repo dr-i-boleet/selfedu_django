@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 
 class Plc(models.Model):
@@ -14,9 +15,9 @@ class Plc(models.Model):
     slag = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='Ссылка')
     description = models.TextField(blank=True, verbose_name='Описание')
     photo = models.ImageField(upload_to='photo/%Y/%m/%d/', verbose_name='Фото')
-    dt_created = models.DateTimeField(auto_now_add=True)
-    dt_updated = models.DateTimeField(auto_now=True)
-    is_published = models.BooleanField(default=True, verbose_name='Опубликовать')
+    dt_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    dt_updated = models.DateTimeField(auto_now=True, verbose_name='Дата редактирования')
+    is_published = models.BooleanField(default=True, verbose_name='Опубликовано?')
     room = models.ForeignKey('Room', on_delete=models.PROTECT, null=True, verbose_name='Электропомещение')
 
     def __str__(self):

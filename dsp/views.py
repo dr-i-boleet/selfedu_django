@@ -151,14 +151,29 @@ class LoginUserView(DataMixin, LoginView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        user_context = self.get_user_context(title='Авторизация')
+
+        if 'load_count' not in self.request.session:
+            load_count = 0
+        else:
+            print(self.request.session['load_count'])
+            load_count = self.request.session['load_count']
+
+        user_context = self.get_user_context(title='Авторизация', load_count=load_count)
         return dict(list(context.items()) + list(user_context.items()))
 
     def get_success_url(self):
         return reverse_lazy('main')
 
+    def form_valid(self, form):
+        self.request.session['load_count'] = 0
+        return super().form_valid(form)
+
     def form_invalid(self, form):
-        print(form.cleaned_data, self.request.get_host())
+        if 'load_count' in self.request.session:
+            self.request.session['load_count'] = self.request.session['load_count'] + 1
+        else:
+            self.request.session['load_count'] = 1
+
         return super().form_invalid(form)
 
 
