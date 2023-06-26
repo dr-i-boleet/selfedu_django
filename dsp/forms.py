@@ -41,7 +41,7 @@ class RegisterUserForm(UserCreationForm):
     username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}), help_text='Логин должен содержать только буквы латинского алфавита')
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}), help_text='Пароль должен содержать не менее 8-ми символов')
     password2 = forms.CharField(label='Пароль еще раз', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
-    email = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    email = forms.CharField(label='e-mail', widget=forms.TextInput(attrs={'class': 'form-input'}))
 
     class Meta:
         model = User
@@ -51,5 +51,6 @@ class RegisterUserForm(UserCreationForm):
 class LoginUserForm(AuthenticationForm):
     username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
-    captcha = CaptchaField()
+    if False:
+        captcha = CaptchaField()
 

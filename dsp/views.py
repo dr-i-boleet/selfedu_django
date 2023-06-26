@@ -157,6 +157,10 @@ class LoginUserView(DataMixin, LoginView):
     def get_success_url(self):
         return reverse_lazy('main')
 
+    def form_invalid(self, form):
+        print(form.cleaned_data, self.request.get_host())
+        return super().form_invalid(form)
+
 
 def logout_user(request):
     logout(request)
