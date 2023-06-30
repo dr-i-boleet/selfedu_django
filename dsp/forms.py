@@ -53,3 +53,7 @@ class LoginUserForm(AuthenticationForm):
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
     captcha = CaptchaField()
 
+    class Meta:
+        model = User
+        fields = ('username', 'password')
+

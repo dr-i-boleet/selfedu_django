@@ -4,6 +4,7 @@
     <h1>{{ title }}</h1>
     <form method="post">
     {% csrf_token %}
+    <div class="form-error">{{ form.non_field_errors }}</div>
     {% for f in form %}
         {% if f.label == 'Captcha' %}
             {% if load_count >= 3 %}

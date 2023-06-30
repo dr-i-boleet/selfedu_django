@@ -9,7 +9,11 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
+from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from dsp.Serializers import PlcSerializer
 from dsp.forms import *
 from dsp.utils import *
 
@@ -180,3 +184,13 @@ class LoginUserView(DataMixin, LoginView):
 def logout_user(request):
     logout(request)
     return redirect('main')
+
+
+class PlcApiView(ListAPIView):
+    queryset = Plc.objects.all()
+    serializer_class = PlcSerializer
+
+
+class PlcGenApiView(APIView):
+    def get(self, request):
+        return Response({'plc:': Plc.objects.all().values()})
