@@ -13,8 +13,8 @@ class Plc(models.Model):
 
     name = models.CharField(max_length=255, verbose_name='Название')
     slag = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='Ссылка')
-    description = models.TextField(blank=True, verbose_name='Описание')
-    photo = models.ImageField(upload_to='photo/%Y/%m/%d/', verbose_name='Фото')
+    description = models.TextField(blank=True, verbose_name='Описание', default='')
+    photo = models.ImageField(null=True, upload_to='photo/%Y/%m/%d/', verbose_name='Фото')
     dt_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     dt_updated = models.DateTimeField(auto_now=True, verbose_name='Дата редактирования')
     is_published = models.BooleanField(default=True, verbose_name='Опубликовано?')

@@ -12,5 +12,7 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('plc/<slug:plc_slug>/', PlcView.as_view(), name='plc'),
     path('api/v1/plclist/', PlcApiView.as_view()),
-    path('test/api/v1/plclist/', PlcGenApiView.as_view())
+    path('test/api/v1/plclist/', PlcGenApiView.as_view()),
+    path('test/api/v1/plc_post/', PlcGenApiView.as_view()),
+    path('test/api/v1/plc/<int:pk>/', PlcGenApiView.as_view())
 ]

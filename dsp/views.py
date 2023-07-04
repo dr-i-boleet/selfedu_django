@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.db.models import QuerySet
+from django.forms import model_to_dict
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 
 from django.shortcuts import render, redirect
@@ -13,7 +14,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from dsp.Serializers import PlcSerializer
+from dsp.Serializers import PlcSerializer, RoomSerializer
 from dsp.forms import *
 from dsp.utils import *
 
@@ -193,4 +194,44 @@ class PlcApiView(ListAPIView):
 
 class PlcGenApiView(APIView):
     def get(self, request):
-        return Response({'plc:': Plc.objects.all().values()})
+        rooms = Room.objects.all()
+        return Response({'rooms:': RoomSerializer(rooms, many=True).data})
+
+    def post(self, request):
+        serializer = RoomSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response({'room': serializer.data})
+
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+
+        if not pk:
+            return Response({'Error': 'Methon PUT not allowed'})
+
+        try:
+            room = Room.objects.get(pk=pk)
+        except:
+            return Response({'Error': 'Object not found'})
+
+        serializer = RoomSerializer(instance=room, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'room': serializer.data})
+
+    def delete(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+
+        if not pk:
+            return Response({'Error', 'Method DELETE not allowed'})
+
+        try:
+            room = Room.objects.get(pk=pk)
+        except:
+            return Response({'Error': 'Object not found'})
+
+        serializer = RoomSerializer(room)
+        room.delete()
+        return Response({'room deleted': serializer.data})
+
