@@ -10,11 +10,12 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
-from dsp.Serializers import PlcSerializer, RoomSerializer
+from dsp.Serializers import PlcSerializer, RoomSerializer, RoomModelSerializer
 from dsp.forms import *
 from dsp.utils import *
 
@@ -235,3 +236,17 @@ class PlcGenApiView(APIView):
         room.delete()
         return Response({'room deleted': serializer.data})
 
+
+class RoomListCreateApiView(ListCreateAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomModelSerializer
+
+
+class RoomApiView(RetrieveUpdateDestroyAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomModelSerializer
+
+
+class RoomViewSet(ModelViewSet):
+    queryset = Room.objects.all()
+    serializer_class = RoomModelSerializer

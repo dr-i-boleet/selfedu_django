@@ -47,6 +47,11 @@ class RoomSerializer(serializers.Serializer):
         return instance
 
 
+class RoomModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = "__all__"
+
 
 class PlcSerializer(ModelSerializer):
     class Meta:

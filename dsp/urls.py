@@ -1,5 +1,10 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import SimpleRouter
+
 from .views import *
+
+router = SimpleRouter()
+router.register(r'room', RoomViewSet)
 
 urlpatterns = [
     path('', IndexView.as_view(), name='main'),
@@ -14,5 +19,6 @@ urlpatterns = [
     path('api/v1/plclist/', PlcApiView.as_view()),
     path('test/api/v1/plclist/', PlcGenApiView.as_view()),
     path('test/api/v1/plc_post/', PlcGenApiView.as_view()),
-    path('test/api/v1/plc/<int:pk>/', PlcGenApiView.as_view())
+    path('test/api/v1/plc/<int:pk>/', PlcGenApiView.as_view()),
+    path('test/api/v1/', include(router.urls))
 ]
