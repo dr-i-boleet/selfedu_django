@@ -10,13 +10,17 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
-from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.decorators import action
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView, \
+    RetrieveDestroyAPIView, RetrieveUpdateAPIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from dsp.Serializers import PlcSerializer, RoomSerializer, RoomModelSerializer
 from dsp.forms import *
+from dsp.permissions import IsOwnerOrReadOnly
 from dsp.utils import *
 
 menu = [{'title': 'О Сайте', 'url_name': 'about'},
@@ -154,6 +158,7 @@ class RegisterView(DataMixin, CreateView):
 class LoginUserView(DataMixin, LoginView):
     form_class = LoginUserForm
     template_name = 'dsp/login.html'
+    print("!!!")
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -161,11 +166,22 @@ class LoginUserView(DataMixin, LoginView):
         if 'load_count' not in self.request.session:
             load_count = 0
         else:
-            print(self.request.session['load_count'])
             load_count = self.request.session['load_count']
 
         user_context = self.get_user_context(title='Авторизация', load_count=load_count)
         return dict(list(context.items()) + list(user_context.items()))
+
+    def get_form_class(self):
+        if 'load_count' not in self.request.session:
+            load_count = 0
+        else:
+            load_count = self.request.session['load_count']
+
+        print("get form class")
+        print(load_count)
+        if load_count > 3:
+            return LoginUserFormCaptcha
+        return LoginUserForm
 
     def get_success_url(self):
         return reverse_lazy('main')
@@ -176,7 +192,9 @@ class LoginUserView(DataMixin, LoginView):
 
     def form_invalid(self, form):
         if 'load_count' in self.request.session:
-            self.request.session['load_count'] = self.request.session['load_count'] + 1
+            print(self.request.session['load_count'])
+            if self.request.session['load_count'] < 4:
+                self.request.session['load_count'] = self.request.session['load_count'] + 1
         else:
             self.request.session['load_count'] = 1
 
@@ -240,13 +258,34 @@ class PlcGenApiView(APIView):
 class RoomListCreateApiView(ListCreateAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomModelSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
-class RoomApiView(RetrieveUpdateDestroyAPIView):
+class RoomUpdateApiView(RetrieveUpdateAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomModelSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
+
+
+class RoomDestroyApiView(RetrieveDestroyAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomModelSerializer
+    permission_classes = (IsAdminUser,)
 
 
 class RoomViewSet(ModelViewSet):
-    queryset = Room.objects.all()
+    # queryset = Room.objects.all()
     serializer_class = RoomModelSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        if not pk:
+            return Room.objects.all()
+
+        return Room.objects.filter(pk=pk)
+
+    @action(methods=['get',], detail=True)
+    def plc(self, request, pk=None):
+        return Response({'plc': Plc.objects.get(pk=pk).name})
+
+

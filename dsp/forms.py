@@ -51,9 +51,17 @@ class RegisterUserForm(UserCreationForm):
 class LoginUserForm(AuthenticationForm):
     username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
-    captcha = CaptchaField()
 
     class Meta:
         model = User
         fields = ('username', 'password')
 
+
+class LoginUserFormCaptcha(AuthenticationForm):
+    username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-input'}))
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-input'}))
+    captcha = CaptchaField()
+
+    class Meta:
+        model = User
+        fields = ('username', 'password')

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
@@ -34,6 +35,7 @@ class Room(models.Model):
 
     name = models.CharField(max_length=255, db_index=True)
     slag = models.SlugField(max_length=255, unique=True, db_index=True)
+    owner = models.ForeignKey(User, verbose_name="Владелец", on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.name}'

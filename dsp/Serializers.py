@@ -48,6 +48,8 @@ class RoomSerializer(serializers.Serializer):
 
 
 class RoomModelSerializer(serializers.ModelSerializer):
+    owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Room
         fields = "__all__"

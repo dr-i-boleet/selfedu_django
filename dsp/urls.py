@@ -1,10 +1,10 @@
 from django.urls import path, include
-from rest_framework.routers import SimpleRouter
+from rest_framework.routers import SimpleRouter, DefaultRouter
 
 from .views import *
 
-router = SimpleRouter()
-router.register(r'room', RoomViewSet)
+router = DefaultRouter()
+router.register(r'room', RoomViewSet, 'room')
 
 urlpatterns = [
     path('', IndexView.as_view(), name='main'),
@@ -20,5 +20,8 @@ urlpatterns = [
     path('test/api/v1/plclist/', PlcGenApiView.as_view()),
     path('test/api/v1/plc_post/', PlcGenApiView.as_view()),
     path('test/api/v1/plc/<int:pk>/', PlcGenApiView.as_view()),
-    path('test/api/v1/', include(router.urls))
+    path('test/api/v1/', include(router.urls)),
+    path('test/api/v1/room_per/list/', RoomListCreateApiView.as_view()),
+    path('test/api/v1/room_per/<int:pk>/', RoomUpdateApiView.as_view()),
+    path('test/api/v1/room_perd/<int:pk>/', RoomDestroyApiView.as_view())
 ]
