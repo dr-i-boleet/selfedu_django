@@ -13,7 +13,7 @@ from django.views.generic import ListView, DetailView, CreateView
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView, \
     RetrieveDestroyAPIView, RetrieveUpdateAPIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -264,7 +264,7 @@ class RoomListCreateApiView(ListCreateAPIView):
 class RoomUpdateApiView(RetrieveUpdateAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomModelSerializer
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
 
 
 class RoomDestroyApiView(RetrieveDestroyAPIView):

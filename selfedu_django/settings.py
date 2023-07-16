@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'captcha',
     'dsp.apps.DspConfig',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken',
+    'djoser'
 ]
 
 MIDDLEWARE = [
@@ -151,3 +153,10 @@ CACHES = {
 
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
+    ),
+}

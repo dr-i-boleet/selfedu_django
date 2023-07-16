@@ -1,4 +1,5 @@
-from django.urls import path, include
+from django.template.defaulttags import url
+from django.urls import path, include, re_path
 from rest_framework.routers import SimpleRouter, DefaultRouter
 
 from .views import *
@@ -23,5 +24,8 @@ urlpatterns = [
     path('test/api/v1/', include(router.urls)),
     path('test/api/v1/room_per/list/', RoomListCreateApiView.as_view()),
     path('test/api/v1/room_per/<int:pk>/', RoomUpdateApiView.as_view()),
-    path('test/api/v1/room_perd/<int:pk>/', RoomDestroyApiView.as_view())
+    path('test/api/v1/room_perd/<int:pk>/', RoomDestroyApiView.as_view()),
+    path('test/api/v1/auth/', include('rest_framework.urls')),
+    path('djoser/', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
 ]
