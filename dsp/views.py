@@ -13,6 +13,7 @@ from django.views.generic import ListView, DetailView, CreateView
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView, \
     RetrieveDestroyAPIView, RetrieveUpdateAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -25,6 +26,12 @@ from dsp.utils import *
 
 menu = [{'title': 'О Сайте', 'url_name': 'about'},
         {'title': 'Обратная связь', 'url_name': 'feedback'}]
+
+
+class RoomPagination(PageNumberPagination):
+    page_size = 2
+    page_size_query_param = 'psize'
+    max_page_size = 1000
 
 
 class IndexView(DataMixin, ListView):
@@ -259,6 +266,7 @@ class RoomListCreateApiView(ListCreateAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomModelSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
+    pagination_class = RoomPagination
 
 
 class RoomUpdateApiView(RetrieveUpdateAPIView):
@@ -287,5 +295,6 @@ class RoomViewSet(ModelViewSet):
     @action(methods=['get',], detail=True)
     def plc(self, request, pk=None):
         return Response({'plc': Plc.objects.get(pk=pk).name})
+
 
 
